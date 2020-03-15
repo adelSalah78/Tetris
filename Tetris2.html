@@ -1,0 +1,143 @@
+<html>
+    <head>
+    </head>
+
+    <body style="left: 500px;position: absolute;width: 300px;height:600px;border-style: solid;display: inline-block;float: left;">
+        <div id="score" style="width:200px;left: 600px;top:20px;position: absolute;">your score is 0</div>
+    </body>
+
+    <script type="text/javascript" src="ShapeFactory.js">
+    </script>
+
+    <script type="text/javascript" src="Shape.js">
+    </script>
+
+    <script type="text/javascript" src="Stick.js">
+    </script>
+
+    <script type="text/javascript">
+    const horizontalBlocks = 15;
+    const verticalBlocks = 30;
+    var score = 0;
+    var gameOver = false;
+
+    const shapes = [{name: "stick",blocksNumber: 4},{name: "sBlock",blocksNumber: 4}];
+    const colors = ["Purple","Green","Red","Yellow","Pink"];
+
+    var blocks = [];
+
+    var currentShape;
+    var drawInterval;
+
+    function initBoard() {
+        for(var i=0;i<verticalBlocks;i++) {
+            var rowArray = [];
+            for(var j=0;j<horizontalBlocks;j++) {
+                var newBlock = document.createElement("div");
+                newBlock.style.width = "20px";
+                newBlock.style.height = "20px";
+                var newLeftPosition = 20*j;
+                var newTopPosition = 20*i;
+                newBlock.style.position = "absolute";
+                newBlock.style.left = newLeftPosition + "px";
+                newBlock.style.top = newTopPosition + "px";
+                newBlock.style.borderStyle = "solid";
+                newBlock.style.borderColor = "Blue";
+                newBlock.id = "block"+i+"_"+j;
+                document.body.appendChild(newBlock);
+                rowArray.push(0);
+            }
+            blocks.push(rowArray);
+        }
+        getNextShape();
+    }
+
+    function removeEmptyBlocksColoring() {
+        for(var i=0;i<verticalBlocks;i++) {
+            for(var j=0;j<horizontalBlocks;j++) {
+                if(blocks[i][j] == 0) {
+                    document.getElementById("block"+i+"_"+j).style.backgroundColor = "White";
+                }
+            }
+        }
+    }
+
+    function getNextShape() {
+        // var random = shapes[Math.floor(Math.random())+(shapes.length -1)];
+        var random = 0;
+        var shapeFactory = ShapeFactory(random);
+        var newShape = shapeFactory();
+        newShape.draw();
+    }
+    
+    function fillBlocks(shape) {
+        for(var i=0;i<shape.shapeBlocks.length;i++) {
+            var row = shape.shapeBlocks[i][0];
+            var column = shape.shapeBlocks[i][1];
+            blocks[row][column] = 1;
+        }
+    }
+
+    function checkRowsToRemove() {
+        for(var i=verticalBlocks -1;i>=0;i--) {
+            var result = false;
+            for(var j=horizontalBlocks -1;j>=0;j--) {
+                if(blocks[i][j] == 1)
+                    result = true;
+                else {
+                    result = false;
+                    break;
+                }
+            }
+            if(result) {
+                removeFilledRow(i);
+                i++;   
+            }
+        }
+    }
+
+    function removeFilledRow(row) {
+        if(row > 0) {
+            for(var j=horizontalBlocks -1;j>=0;j--) {
+                for(var i=row;i>0;i--) {
+                    blocks[i][j] = blocks[i-1][j];
+                    document.getElementById("block"+i+"_"+j).style.backgroundColor = document.getElementById("block"+(i-1)+"_"+j).style.backgroundColor;
+                }
+            }   
+        }
+        else {
+            for(var j=horizontalBlocks -1;j>=0;j--) {
+                blocks[row][j] = 0;
+                document.getElementById("block"+row+"_"+j).style.backgroundColor = "White";
+            }
+        }
+        score+=5;
+        document.getElementById('score').innerHTML = "your score is: " + score;
+
+        // for(var j=horizontalBlocks -1;j>=0;j--) {
+        //     blocks[row][j] = 0;
+        //     document.getElementById("block"+row+"_"+j).style.backgroundColor = "White";
+        // }
+    }
+
+    function isGameOver(shapeBlocks) {
+        for(var i=0;i<shapeBlocks.length;i++) {
+            if(shapeBlocks[i][0] < 0) {
+                document.getElementById('score').style.color = "RED";
+                document.getElementById('score').innerHTML = "Game is Over! your score is: "+score;
+                gameOver = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    initBoard();
+
+    document.body.onkeypress = function(e){
+    if(String.fromCharCode(e.keyCode) == 'r'){ // r to rotate
+        currentShape.rotate();
+    }
+}
+    </script>
+</html>
