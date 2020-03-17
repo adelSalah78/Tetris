@@ -50,3 +50,83 @@ function moveStick() {
         currentShape.shapeBlocks[i][0] = currentShape.shapeBlocks[i][0] + 1;
     }
 }
+
+function initStick(settings) {
+    settings.draw = function () {
+        currentShape = this;
+        drawInterval = setInterval(moveStick,1000);
+    };
+
+    settings.rotate = function () {
+        removeEmptyBlocksColoring();
+        currentShape.isVertical = !currentShape.isVertical;
+        if(currentShape.isVertical) {
+            var shapeBlocks = currentShape.shapeBlocks;
+            var oldRow = shapeBlocks[0][0];
+            oldRow-=(shapeBlocks.length/2);
+
+            if(oldRow + shapeBlocks.length > verticalBlocks) {
+                oldRow = verticalBlocks - shapeBlocks.length;
+            }
+
+            var newColumn = shapeBlocks[0][1] + (shapeBlocks.length/2);
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = newColumn;
+                this.shapeBlocks[i][0] = oldRow;
+                oldRow ++;
+            }
+        }
+        else {
+            var shapeBlocks = currentShape.shapeBlocks;
+            var oldColumn = shapeBlocks[0][1];
+            oldColumn-=(shapeBlocks.length/2);
+            if(oldColumn < 0)
+                oldColumn = 0;
+            else if(oldColumn+shapeBlocks.length > horizontalBlocks)
+                oldColumn = horizontalBlocks - shapeBlocks.length;
+            
+            var newRow = shapeBlocks[0][0] + (shapeBlocks.length/2);
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = oldColumn;
+                this.shapeBlocks[i][0] = newRow;
+                oldColumn ++;
+            }
+        }
+        moveStick();
+    };
+
+    settings.keyDown = function(event) {
+        if(gameOver)
+            return;
+        if(event.keyCode == 37) { //left
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                if(this.shapeBlocks[i][1] - 1 < 0)
+                    return;
+            }
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = this.shapeBlocks[i][1] - 1;
+            }
+        }
+        else if(event.keyCode == 39) { //right
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                if(this.shapeBlocks[i][1] + 1 >= horizontalBlocks)
+                    return;
+            }
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = this.shapeBlocks[i][1] + 1;
+            }
+        }
+        else if(event.keyCode == 40) { //down
+            clearInterval(drawInterval);
+            drawInterval = setInterval(moveStick,1);
+        }
+        currentShape = this;
+        moveStick();
+    };
+
+    settings.blocks = [];
+    settings.blocks.push([-3,7]);
+    settings.blocks.push([-2,7]);
+    settings.blocks.push([-1,7]);
+    settings.blocks.push([0,7]);
+}

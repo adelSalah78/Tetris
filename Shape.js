@@ -12,4 +12,6 @@ var Shape = function(settings) {
     document.body.onkeydown = this.keyDown.bind(this);
 
     this.shapeBlocks = settings.blocks;
+
+    this.rotatePosition = settings.rotatePosition;
 }

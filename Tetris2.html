@@ -15,13 +15,19 @@
     <script type="text/javascript" src="Stick.js">
     </script>
 
+    <script type="text/javascript" src="SquareBlock.js">
+    </script>
+
+    <script type="text/javascript" src="TBlock.js">
+    </script>
+
     <script type="text/javascript">
     const horizontalBlocks = 15;
     const verticalBlocks = 30;
     var score = 0;
     var gameOver = false;
 
-    const shapes = [{name: "stick",blocksNumber: 4},{name: "sBlock",blocksNumber: 4}];
+    const shapes = [{name: "stick",blocksNumber: 4},{name: "sBlock",blocksNumber: 4},{name: "tBlock",blocksNumber: 4}];
     const colors = ["Purple","Green","Red","Yellow","Pink"];
 
     var blocks = [];
@@ -64,7 +70,7 @@
 
     function getNextShape() {
         // var random = shapes[Math.floor(Math.random())+(shapes.length -1)];
-        var random = 0;
+        var random = 2;
         var shapeFactory = ShapeFactory(random);
         var newShape = shapeFactory();
         newShape.draw();

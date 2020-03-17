@@ -35,3 +35,47 @@ function moveSBlock() {
         currentShape.shapeBlocks[i][0] = currentShape.shapeBlocks[i][0] + 1;
     }
 }
+
+function initSquareBlock(settings){
+    settings.draw = function () {
+        //TODO
+        currentShape = this;
+        drawInterval = setInterval(moveSBlock,1000);
+    };
+
+    settings.rotate = function () {
+        //TODO
+    };
+
+    settings.keyDown = function(event) {
+        //TODO
+        if(gameOver)
+            return;
+        if(event.keyCode == 37) { //left
+            if(this.shapeBlocks[0][1] - 1 < 0)
+                return;
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = this.shapeBlocks[i][1] - 1;
+            }
+        }
+        else if(event.keyCode == 39) { //right
+            if(this.shapeBlocks[this.shapeBlocks.length-1][1] + 1 >= horizontalBlocks)
+                return;
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                this.shapeBlocks[i][1] = this.shapeBlocks[i][1] + 1;
+            }
+        }
+        else if(event.keyCode == 40) { //down
+            clearInterval(drawInterval);
+            drawInterval = setInterval(moveSBlock,1);
+        }
+        currentShape = this;
+        moveSBlock();
+    };
+
+    settings.blocks = [];
+    settings.blocks.push([-2,6]);
+    settings.blocks.push([-2,7]);
+    settings.blocks.push([-1,6]);
+    settings.blocks.push([-1,7]);
+}
