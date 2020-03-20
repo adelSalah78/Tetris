@@ -40,15 +40,14 @@ function moveStick() {
             return;
         }
         fillBlocks(currentShape);
-        getNextShape();
+        colorShapeStopMoving(arr,color);
         checkRowsToRemove();
+        getNextShape();
+        return;
     }
 
-    for(var i=0;i<arr.length;i++) {
-        if(arr[i][0] < 0)
-            continue;
-        document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor = color;
-    }
+    colorShapeStopMoving(arr,color);
+
     for(var i=0;i<currentShape.shapeBlocks.length;i++) {
         currentShape.shapeBlocks[i][0] = currentShape.shapeBlocks[i][0] + 1;
     }
@@ -57,7 +56,7 @@ function moveStick() {
 function initStick(settings) {
     settings.draw = function () {
         currentShape = this;
-        drawInterval = setInterval(moveStick,1000);
+        drawInterval = setInterval(moveStick,speed);
     };
 
     settings.rotate = function () {

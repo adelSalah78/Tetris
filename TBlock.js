@@ -11,15 +11,13 @@ function moveTBlock() {
             return;
         }
         fillBlocks(currentShape);
-        getNextShape();
+        colorShapeStopMoving(arr,color);
         checkRowsToRemove();
+        getNextShape();
+        return;
     }
 
-    for(var i=0;i<arr.length;i++) {
-        if(arr[i][0] < 0)
-            continue;
-        document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor = color;
-    }
+    colorShapeStopMoving(arr,color);
 
     for(var i=0;i<currentShape.shapeBlocks.length;i++) {
         currentShape.shapeBlocks[i][0] = currentShape.shapeBlocks[i][0] + 1;
@@ -70,7 +68,7 @@ function initTBlock(settings) {
     settings.draw = function () {
         //TODO
         currentShape = this;
-        drawInterval = setInterval(moveTBlock,1000);
+        drawInterval = setInterval(moveTBlock,speed);
     };
 
     settings.rotate = function () {
@@ -149,7 +147,7 @@ function initTBlock(settings) {
                 }
             }
             else if(rotatePosition == 3) {
-                if(currentShape.shapeBlocks[3][1] <=0) {
+                if(currentShape.shapeBlocks[0][1] <=0) {
                     return;
                 }
             }

@@ -2,7 +2,7 @@ function initNBlock(settings) {
     settings.draw = function () {
         //TODO
         currentShape = this;
-        drawInterval = setInterval(moveNBlock,1000);
+        drawInterval = setInterval(moveNBlock,speed);
     };
 
     settings.rotate = function () {
@@ -203,15 +203,13 @@ function moveNBlock() {
             return;
         }
         fillBlocks(currentShape);
-        getNextShape();
+        colorShapeStopMoving(arr,color);
         checkRowsToRemove();
+        getNextShape();
+        return;
     }
 
-    for(var i=0;i<arr.length;i++) {
-        if(arr[i][0] < 0)
-            continue;
-        document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor = color;
-    }
+    colorShapeStopMoving(arr,color);
 
     for(var i=0;i<currentShape.shapeBlocks.length;i++) {
         currentShape.shapeBlocks[i][0] = currentShape.shapeBlocks[i][0] + 1;

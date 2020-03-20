@@ -30,6 +30,8 @@
     <script type="text/javascript">
     const horizontalBlocks = 15;
     const verticalBlocks = 30;
+    const moduloScore = 50;
+    const speedIncrease = 100;
     var score = 0;
     var gameOver = false;
 
@@ -40,6 +42,9 @@
 
     var currentShape;
     var drawInterval;
+
+    var scoreIncrease = 5;
+    var speed = 1000;
 
     function initBoard() {
         for(var i=0;i<verticalBlocks;i++) {
@@ -56,6 +61,7 @@
                 newBlock.style.borderStyle = "solid";
                 newBlock.style.borderColor = "Blue";
                 newBlock.id = "block"+i+"_"+j;
+                newBlock.innerHTML = 0;
                 document.body.appendChild(newBlock);
                 rowArray.push(0);
             }
@@ -76,7 +82,7 @@
 
     function getNextShape() {
         var random = Math.floor(Math.random()*(shapes.length -1));
-        // var random = 4;
+        // var random = 2;
         var shapeFactory = ShapeFactory(random);
         var newShape = shapeFactory();
         newShape.draw();
@@ -87,7 +93,16 @@
             var row = shape.shapeBlocks[i][0];
             var column = shape.shapeBlocks[i][1];
             blocks[row][column] = 1;
+            document.getElementById("block"+row+"_"+column).innerHTML = blocks[row][column];
         }
+    }
+
+    function colorShapeStopMoving(arr,color) {
+        for(var i=0;i<arr.length;i++) {
+            if(arr[i][0] < 0)
+                continue;
+            document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor = color;
+         }
     }
 
     function checkRowsToRemove() {
@@ -114,6 +129,7 @@
                 for(var i=row;i>0;i--) {
                     blocks[i][j] = blocks[i-1][j];
                     document.getElementById("block"+i+"_"+j).style.backgroundColor = document.getElementById("block"+(i-1)+"_"+j).style.backgroundColor;
+                    document.getElementById("block"+i+"_"+j).innerHTML = blocks[i][j];
                 }
             }   
         }
@@ -123,7 +139,11 @@
                 document.getElementById("block"+row+"_"+j).style.backgroundColor = "White";
             }
         }
-        score+=5;
+        score+=scoreIncrease;
+        if(score % moduloScore === 0) {
+            scoreIncrease+=scoreIncrease;
+            speed-=speedIncrease;
+        }
         document.getElementById('score').innerHTML = "your score is: " + score;
 
         // for(var j=horizontalBlocks -1;j>=0;j--) {
