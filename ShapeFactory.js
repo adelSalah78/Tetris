@@ -20,6 +20,10 @@ function ShapeFactory(number) {
             initTBlock(settings);
         }
 
+        if(settings.name == 'lBlock') {
+            initLBlock(settings);
+        }
+
         return new Shape(settings);
     }
     return getShape;

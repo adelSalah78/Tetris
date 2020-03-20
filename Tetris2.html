@@ -21,13 +21,16 @@
     <script type="text/javascript" src="TBlock.js">
     </script>
 
+    <script type="text/javascript" src="LBlock.js">
+    </script>
+
     <script type="text/javascript">
     const horizontalBlocks = 15;
     const verticalBlocks = 30;
     var score = 0;
     var gameOver = false;
 
-    const shapes = [{name: "stick",blocksNumber: 4},{name: "sBlock",blocksNumber: 4},{name: "tBlock",blocksNumber: 4}];
+    const shapes = [{name: "stick",blocksNumber: 4},{name: "sBlock",blocksNumber: 4},{name: "tBlock",blocksNumber: 4},{name: "lBlock",blocksNumber: 5}];
     const colors = ["Purple","Green","Red","Yellow","Pink"];
 
     var blocks = [];
@@ -70,7 +73,7 @@
 
     function getNextShape() {
         // var random = shapes[Math.floor(Math.random())+(shapes.length -1)];
-        var random = 2;
+        var random = 3;
         var shapeFactory = ShapeFactory(random);
         var newShape = shapeFactory();
         newShape.draw();
@@ -124,6 +127,15 @@
         //     blocks[row][j] = 0;
         //     document.getElementById("block"+row+"_"+j).style.backgroundColor = "White";
         // }
+    }
+
+    function colorGameOverShape(arr,color) {
+        for(var i=0;i<arr.length;i++) {
+            if(arr[i][0] < 0)
+                continue;
+            if(document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor.toLowerCase() == "white")
+                document.getElementById("block"+arr[i][0]+"_"+arr[i][1]).style.backgroundColor = color;
+        }
     }
 
     function isGameOver(shapeBlocks) {

@@ -18,6 +18,7 @@ function moveSBlock() {
         clearInterval(drawInterval);
         if(isGameOver((arr))) {
             // window.location.href = window.location.href;
+            colorGameOverShape(arr,color);
             return;
         }
         fillBlocks(currentShape);
