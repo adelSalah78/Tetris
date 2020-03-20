@@ -12,16 +12,19 @@ function ShapeFactory(number) {
             initStick(settings);
         }
 
-        if(settings.name == 'sBlock') {
+        else if(settings.name == 'sBlock') {
             initSquareBlock(settings);
         }
 
-        if(settings.name == 'tBlock') {
+        else if(settings.name == 'tBlock') {
             initTBlock(settings);
         }
 
-        if(settings.name == 'lBlock') {
+        else if(settings.name == 'lBlock') {
             initLBlock(settings);
+        }
+        else if(settings.name == 'nBlock') {
+            initNBlock(settings);
         }
 
         return new Shape(settings);
