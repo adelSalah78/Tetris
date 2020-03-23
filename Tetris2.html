@@ -61,7 +61,7 @@
                 newBlock.style.borderStyle = "solid";
                 newBlock.style.borderColor = "Blue";
                 newBlock.id = "block"+i+"_"+j;
-                newBlock.innerHTML = 0;
+                // newBlock.innerHTML = 0;
                 document.body.appendChild(newBlock);
                 rowArray.push(0);
             }
@@ -93,7 +93,7 @@
             var row = shape.shapeBlocks[i][0];
             var column = shape.shapeBlocks[i][1];
             blocks[row][column] = 1;
-            document.getElementById("block"+row+"_"+column).innerHTML = blocks[row][column];
+            // document.getElementById("block"+row+"_"+column).innerHTML = blocks[row][column];
         }
     }
 
@@ -129,7 +129,7 @@
                 for(var i=row;i>0;i--) {
                     blocks[i][j] = blocks[i-1][j];
                     document.getElementById("block"+i+"_"+j).style.backgroundColor = document.getElementById("block"+(i-1)+"_"+j).style.backgroundColor;
-                    document.getElementById("block"+i+"_"+j).innerHTML = blocks[i][j];
+                    // document.getElementById("block"+i+"_"+j).innerHTML = blocks[i][j];
                 }
             }   
         }
