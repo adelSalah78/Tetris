@@ -73,6 +73,9 @@ function initTBlock(settings) {
 
     settings.rotate = function () {
         //TODO
+        if(!shouldTBlockRotate(currentShape.rotatePosition + 1)) {
+            return;
+        }
         removeEmptyBlocksColoring();
         if(currentShape.rotatePosition == 4){
             currentShape.rotatePosition = 1;
@@ -140,21 +143,31 @@ function initTBlock(settings) {
                 if(currentShape.shapeBlocks[3][1] <=0) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] - 1] == 1 || blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] - 1] == 1
+                    || blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] - 1] == 1)
+                    return;
             }
             else if(rotatePosition == 2) {
                 if(currentShape.shapeBlocks[2][1] <=0) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] - 1] == 1 || blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] - 1] == 1)
+                    return;
             }
             else if(rotatePosition == 3) {
                 if(currentShape.shapeBlocks[0][1] <=0) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] - 1] == 1 || blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] - 1] == 1
+                    || blocks[currentShape.shapeBlocks[1][0]][currentShape.shapeBlocks[1][1] - 1] == 1)
+                    return;
             }
             else if(rotatePosition == 4) {
                 if(currentShape.shapeBlocks[0][1] <=0) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] - 1] == 1 || blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] - 1] == 1)
+                    return;
             }
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 this.shapeBlocks[i][1] = this.shapeBlocks[i][1] - 1;
@@ -166,21 +179,32 @@ function initTBlock(settings) {
                 if(currentShape.shapeBlocks[0][1] >=horizontalBlocks - 1) {
                     return;
                 }
+
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] + 1] == 1 || blocks[currentShape.shapeBlocks[1][0]][currentShape.shapeBlocks[1][1] + 1] == 1
+                    || blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] + 1] == 1)
+                    return;
             }
             else if(rotatePosition == 2) {
                 if(currentShape.shapeBlocks[0][1] >=horizontalBlocks - 1) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] + 1] == 1 || blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] + 1] == 1)
+                    return;
             }
             else if(rotatePosition == 3) {
                 if(currentShape.shapeBlocks[3][1] >=horizontalBlocks - 1) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1] + 1] == 1 || blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] + 1] == 1
+                    || blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] + 1] == 1)
+                    return;
             }
             else if(rotatePosition == 4) {
                 if(currentShape.shapeBlocks[2][1] >=horizontalBlocks - 1) {
                     return;
                 }
+                if(blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1] + 1] == 1 || blocks[currentShape.shapeBlocks[2][0]][currentShape.shapeBlocks[2][1] + 1] == 1)
+                    return;
             }
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 this.shapeBlocks[i][1] = this.shapeBlocks[i][1] + 1;
@@ -201,4 +225,53 @@ function initTBlock(settings) {
     settings.blocks.push([-1,7]);
     settings.blocks.push([0,7]);
     settings.blocks.push([-1,6]);
+}
+
+function shouldTBlockRotate(nextRotatePosition) {
+    if(nextRotatePosition > 4){
+        nextRotatePosition = 1;
+    }
+
+    var first = currentShape.shapeBlocks[0].slice();
+    var second = currentShape.shapeBlocks[1].slice();
+    var third = currentShape.shapeBlocks[2].slice();
+    var fourth = currentShape.shapeBlocks[3].slice();
+
+    if(first[0]<0 || second[0]<0 || third[0]<0 || fourth[0]<0) {
+        return false;
+    }
+
+    if(nextRotatePosition == 1) {
+        first[1]+=2;
+        second[1]+=1;
+        second[0]+=1;
+
+        third[0]+=2;
+    }
+    else if(nextRotatePosition == 2) {
+        third[1]-=2;
+
+        second[1]-=1;
+        second[0]+=1;
+
+        first[0]+=2;
+    }
+    else if(nextRotatePosition == 3) {
+        first[1]-=2;
+
+        second[1]-=1;
+        second[0]-=1;
+
+        third[0]-=2;
+    }
+    else if(nextRotatePosition == 4) {
+        first[0]-=2;
+
+        second[1]+=1;
+        second[0]-=1;
+
+        third[1]+=2;
+    }
+
+    return !(blocks[first[0]][first[1]] == 1 || blocks[second[0]][second[1]] == 1 || blocks[third[0]][third[1]] == 1 || blocks[fourth[0]][fourth[1]] == 1);
 }

@@ -88,6 +88,16 @@ function initStick(settings) {
                 oldColumn = horizontalBlocks - shapeBlocks.length;
             
             var newRow = shapeBlocks[0][0] + (shapeBlocks.length/2);
+            var checkColumn = oldColumn;
+            for(var i=0;i<this.shapeBlocks.length;i++) {
+                if(blocks[newRow][checkColumn] == 1) {
+                    currentShape.isVertical = !currentShape.isVertical;
+                    moveStick();
+                    return;
+                }
+                checkColumn ++;
+            }
+
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 this.shapeBlocks[i][1] = oldColumn;
                 this.shapeBlocks[i][0] = newRow;
@@ -101,6 +111,19 @@ function initStick(settings) {
         if(gameOver)
             return;
         if(event.keyCode == 37) { //left
+            if(currentShape.isVertical) {
+                for(var i=0;i<currentShape.shapeBlocks.length;i++) {
+                    if(blocks[currentShape.shapeBlocks[i][0]][currentShape.shapeBlocks[i][1]-1] == 1) {
+                        return;
+                    }
+                }
+            }
+            else {
+                if(blocks[currentShape.shapeBlocks[0][0]][currentShape.shapeBlocks[0][1]-1] == 1) {
+                    return;
+                }
+            }
+
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 if(this.shapeBlocks[i][1] - 1 < 0)
                     return;
@@ -110,6 +133,19 @@ function initStick(settings) {
             }
         }
         else if(event.keyCode == 39) { //right
+            if(currentShape.isVertical) {
+                for(var i=0;i<currentShape.shapeBlocks.length;i++) {
+                    if(blocks[currentShape.shapeBlocks[i][0]][currentShape.shapeBlocks[i][1]+1] == 1) {
+                        return;
+                    }
+                }
+            }
+            else {
+                if(blocks[currentShape.shapeBlocks[3][0]][currentShape.shapeBlocks[3][1]+1] == 1) {
+                    return;
+                }
+            }
+
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 if(this.shapeBlocks[i][1] + 1 >= horizontalBlocks)
                     return;

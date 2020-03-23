@@ -83,6 +83,8 @@ function initLBlock(settings) {
     };
 
     settings.rotate = function () {
+        if(!shouldLBlockRotate(currentShape.rotatePosition + 1))
+            return;
         removeEmptyBlocksColoring();
         if(currentShape.rotatePosition == 4){
             currentShape.rotatePosition = 1;
@@ -170,7 +172,7 @@ function initLBlock(settings) {
                     currentShape.shapeBlocks[i][1]-=subtract;
             }
             if(currentShape.shapeBlocks[0][1] < 0) {
-                var addition = currentShape.shapeBlocks[1][1] * -1;
+                var addition = currentShape.shapeBlocks[0][1] * -1;
                 for(var i=0;i<currentShape.shapeBlocks.length;i++)
                     currentShape.shapeBlocks[i][1]+=addition;
             }
@@ -214,17 +216,27 @@ function initLBlock(settings) {
             if(currentShape.rotatePosition == 1) {
                 if(shapeBlocks[1][1] <=0)
                     return;
+                if(blocks[shapeBlocks[1][0]][shapeBlocks[1][1]-1] == 1 || blocks[shapeBlocks[2][0]][shapeBlocks[2][1]-1] == 1 ||
+                    blocks[shapeBlocks[3][0]][shapeBlocks[3][1]-1] == 1 || blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
+                    return;
             }
             else if(currentShape.rotatePosition == 2) {
                 if(shapeBlocks[4][1] <=0)
+                    return;
+                if(blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
                     return;
             }
             else if(currentShape.rotatePosition == 3) {
                 if(shapeBlocks[0][1] <=0)
                     return;
+                if(blocks[shapeBlocks[0][0]][shapeBlocks[0][1]-1] == 1 || blocks[shapeBlocks[2][0]][shapeBlocks[2][1]-1] == 1 ||
+                    blocks[shapeBlocks[3][0]][shapeBlocks[3][1]-1] == 1 || blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
+                    return;
             }
             else if(currentShape.rotatePosition == 4) {
                 if(shapeBlocks[0][1] <=0)
+                    return;
+                if(blocks[shapeBlocks[0][0]][shapeBlocks[0][1]-1] == 1 || blocks[shapeBlocks[1][0]][shapeBlocks[1][1]-1] == 1)
                     return;
             }
             for(var i=0;i<this.shapeBlocks.length;i++) {
@@ -234,18 +246,28 @@ function initLBlock(settings) {
         else if(event.keyCode == 39) { //right
             if(currentShape.rotatePosition == 1) {
                 if(shapeBlocks[0][1] >=horizontalBlocks-1)
+                    return;
+                if(blocks[shapeBlocks[0][0]][shapeBlocks[0][1]-1] == 1 || blocks[shapeBlocks[2][0]][shapeBlocks[2][1]-1] == 1 ||
+                    blocks[shapeBlocks[3][0]][shapeBlocks[3][1]-1] == 1 || blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
                     return;   
             }
             else if(currentShape.rotatePosition == 2) {
                 if(shapeBlocks[0][1] >=horizontalBlocks-1)
+                    return;
+                if(blocks[shapeBlocks[0][0]][shapeBlocks[0][1]-1] == 1 || blocks[shapeBlocks[1][0]][shapeBlocks[1][1]-1] == 1)
                     return;   
             }
             else if(currentShape.rotatePosition == 3) {
                 if(shapeBlocks[4][1] >=horizontalBlocks-1)
+                    return;
+                if(blocks[shapeBlocks[1][0]][shapeBlocks[1][1]-1] == 1 || blocks[shapeBlocks[2][0]][shapeBlocks[2][1]-1] == 1 ||
+                    blocks[shapeBlocks[3][0]][shapeBlocks[3][1]-1] == 1 || blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
                     return;   
             }
             else if(currentShape.rotatePosition == 4) {
                 if(shapeBlocks[4][1] >=horizontalBlocks-1)
+                    return;
+                if(blocks[shapeBlocks[4][0]][shapeBlocks[4][1]-1] == 1)
                     return;   
             }
             for(var i=0;i<this.shapeBlocks.length;i++) {
@@ -268,4 +290,156 @@ function initLBlock(settings) {
     settings.blocks.push([-2,6]);
     settings.blocks.push([-1,6]);
     settings.blocks.push([0,6]);
+}
+function shouldLBlockRotate(nextRotatePosition) {
+    if(nextRotatePosition > 4){
+        nextRotatePosition = 1;
+    }
+    var first = currentShape.shapeBlocks[0].slice();
+    var second = currentShape.shapeBlocks[1].slice();
+    var third = currentShape.shapeBlocks[2].slice();
+    var fourth = currentShape.shapeBlocks[3].slice();
+    var fifth = currentShape.shapeBlocks[4].slice();
+
+    if(first[0]<0 || second[0]<0 || third[0]<0 || fourth[0]<0 || fifth[0]<0) {
+        return false;
+    }
+
+    if(nextRotatePosition == 1) {
+        first[1]+=2;
+        first[0]-=1;
+
+        second[1] = first[1] - 1;
+        second[0] = first[0];
+
+        third[0] = first[0] +1;
+        third[1] = first[1] -1;
+
+        fourth[0] = first[0] +2;
+        fourth[1] = first[1] -1;
+
+        fifth[0] = first[0] +3;
+        fifth[1] = first[1] -1;
+
+        if(first[1] >= horizontalBlocks) {
+            var subtract = first[1] - (horizontalBlocks - 1);
+            // currentShape.shapeBlocks[0][1]+=subtract;
+            first[1]-=subtract;
+            second[1]-=subtract;
+            third[1]-=subtract;
+            fourth[1]-=subtract;
+            fifth[1]-=subtract;
+        }
+        if(second[1] < 0) {
+            var addition = second[1] * -1;
+            first[1]+=addition;
+            second[1]+=addition;
+            third[1]+=addition;
+            fourth[1]+=addition;
+            fifth[1]+=addition;
+        }
+    }
+    else if(nextRotatePosition == 2) {
+        first[1]+=2;
+        first[0]+=1;
+
+        second[1] = first[1];
+        second[0] = first[0] -1;
+
+        third[0] = first[0] -1;
+        third[1] = first[1] -1;
+
+        fourth[0] = first[0] -1;
+        fourth[1] = first[1] -2;
+
+        fifth[0] = first[0] -1;
+        fifth[1] = first[1] -3;
+
+        if(first[1] >= horizontalBlocks) {
+            var subtract = first[1] - (horizontalBlocks - 1);
+            // currentShape.shapeBlocks[0][1]+=subtract;
+            first[1]-=subtract;
+            second[1]-=subtract;
+            third[1]-=subtract;
+            fourth[1]-=subtract;
+            fifth[1]-=subtract;
+        }
+        if(fifth[1] < 0) {
+            var addition = fifth[1] * -1;
+            first[1]+=addition;
+            second[1]+=addition;
+            third[1]+=addition;
+            fourth[1]+=addition;
+            fifth[1]+=addition;
+        }
+    }
+    else if(nextRotatePosition == 3) {
+        first[1]-=2;
+        first[0]+=1;
+
+        second[1] = first[1] + 1;
+        second[0] = first[0];
+
+        third[0] = first[0] -1;
+        third[1] = first[1] +1;
+
+        fourth[0] = first[0] -2;
+        fourth[1] = first[1] +1;
+
+        fifth[0] = first[0] -3;
+        fifth[1] = first[1] +1;
+
+        if(fifth[1] >= horizontalBlocks) {
+            var subtract = fifth[1] - (horizontalBlocks - 1);
+            // currentShape.shapeBlocks[0][1]+=subtract;
+            first[1]-=subtract;
+            second[1]-=subtract;
+            third[1]-=subtract;
+            fourth[1]-=subtract;
+            fifth[1]-=subtract;
+        }
+        if(first[1] < 0) {
+            var addition = first[1] * -1;
+            first[1]+=addition;
+            second[1]+=addition;
+            third[1]+=addition;
+            fourth[1]+=addition;
+            fifth[1]+=addition;
+        }
+    }
+    else if(nextRotatePosition == 4) {
+        first[1]-=2;
+        first[0]-=1;
+
+        second[1] = first[1];
+        second[0] = first[0] + 1;
+
+        third[0] = first[0] +1;
+        third[1] = first[1] +1;
+
+        fourth[0] = first[0] +1;
+        fourth[1] = first[1] +2;
+
+        fifth[0] = first[0] +1;
+        fifth[1] = first[1] +3;
+
+        if(fifth[1] >= horizontalBlocks) {
+            var subtract = fifth[1] - (horizontalBlocks - 1);
+            // currentShape.shapeBlocks[0][1]+=subtract;
+            first[1]-=subtract;
+            second[1]-=subtract;
+            third[1]-=subtract;
+            fourth[1]-=subtract;
+            fifth[1]-=subtract;
+        }
+        if(first[1] < 0) {
+            var addition = first[1] * -1;
+            first[1]+=addition;
+            second[1]+=addition;
+            third[1]+=addition;
+            fourth[1]+=addition;
+            fifth[1]+=addition;
+        }
+    }
+    return !(blocks[first[0]][first[1]] == 1 || blocks[second[0]][second[1]] == 1 || blocks[third[0]][third[1]] == 1 || blocks[fourth[0]][fourth[1]] == 1 || blocks[fifth[0]][fifth[1]] == 1) ;
 }

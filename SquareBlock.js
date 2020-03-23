@@ -53,6 +53,9 @@ function initSquareBlock(settings){
         if(event.keyCode == 37) { //left
             if(this.shapeBlocks[0][1] - 1 < 0)
                 return;
+            if(blocks[this.shapeBlocks[0][0]][this.shapeBlocks[0][1] - 1] == 1 || blocks[this.shapeBlocks[2][0]][this.shapeBlocks[2][1] - 1] == 1) {
+                return;
+            }
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 this.shapeBlocks[i][1] = this.shapeBlocks[i][1] - 1;
             }
@@ -60,6 +63,9 @@ function initSquareBlock(settings){
         else if(event.keyCode == 39) { //right
             if(this.shapeBlocks[this.shapeBlocks.length-1][1] + 1 >= horizontalBlocks)
                 return;
+            if(blocks[this.shapeBlocks[1][0]][this.shapeBlocks[1][1] + 1] == 1 || blocks[this.shapeBlocks[3][0]][this.shapeBlocks[3][1] + 1] == 1) {
+                return;
+            }
             for(var i=0;i<this.shapeBlocks.length;i++) {
                 this.shapeBlocks[i][1] = this.shapeBlocks[i][1] + 1;
             }
